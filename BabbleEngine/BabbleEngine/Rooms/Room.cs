@@ -22,7 +22,7 @@ namespace BabbleEngine
         public NodeManager nodes = new NodeManager();
 
         public Vector2 camera = -Engine.RESOLUTION / 2;
-        public WorldObject cameraTarget = null;
+        public List<WorldObject> cameraTargets = new List<WorldObject>();
 
         public Vector2 boundsTopLeft = -Engine.RESOLUTION;
         public Vector2 boundsBottomRight = Engine.RESOLUTION;
@@ -74,6 +74,19 @@ namespace BabbleEngine
         }
 
         /// <summary>
+        /// This cameraTarget exists for compatiblity with older systems.
+        /// </summary>
+        public WorldObject cameraTarget
+        {
+            get { return cameraTargets.Count == 0 ? null : cameraTargets[0]; }
+            set
+            {
+                cameraTargets.Clear();
+                cameraTargets.Add(value);
+            }
+        }
+
+        /// <summary>
         /// Returns 2 if cannot find the file.
         /// Returns 0 if everything is OK.
         /// Returns 3 if it had to load new textures.
@@ -107,7 +120,7 @@ namespace BabbleEngine
             i = 10;
             int flag = 0;
 
-            while(i < lines.Length)
+            while (i < lines.Length)
             {
                 string type = lines[i++];
                 switch (type)
@@ -147,7 +160,7 @@ namespace BabbleEngine
                             }
 
                         }
-                        else 
+                        else
                             tex = TextureBin.GetTexture(lines[i]);
                         i++;
 

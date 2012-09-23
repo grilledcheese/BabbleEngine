@@ -87,6 +87,7 @@
     <Compile Include="Support\BufferedList.cs" />
     <Compile Include="Support\DrawHelper.cs" />
     <Compile Include="Support\Input.cs" />
+    <Compile Include="Support\MathExtra.cs" />
     <Compile Include="Support\TextureBin.cs" />
     <Compile Include="TextBoxes\SelectColorBox.cs" />
     <Compile Include="TextBoxes\TextBox.cs" />
