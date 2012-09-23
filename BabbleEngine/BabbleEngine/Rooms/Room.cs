@@ -33,6 +33,7 @@ namespace BabbleEngine
             this.blocks = new List<Block>();
             this.cameraTarget = null;
             this.objects = new BufferedList<WorldObject>();
+            this.nodes = new NodeManager();
         }
 
         public virtual void Update()
@@ -144,6 +145,9 @@ namespace BabbleEngine
                         break;
                     case "WorldObject":
                         objects.Add(new WorldObject(new Vector2(float.Parse(lines[i++]), float.Parse(lines[i++])), new Vector2(float.Parse(lines[i++]), float.Parse(lines[i++])), TextureBin.GetTexture(lines[i++]), this));
+                        break;
+                    case "Node":
+                        nodes.AddNode(lines[i++], new Vector2(float.Parse(lines[i++]), float.Parse(lines[i++])));
                         break;
                     case "Decal":
                         bool isFront = (lines[i++] == "F");
@@ -268,6 +272,13 @@ namespace BabbleEngine
                 lines.Add(b.position.Y.ToString());
                 lines.Add(b.size.X.ToString());
                 lines.Add(b.size.Y.ToString());
+            }
+            foreach (Tuple<String, Vector2> n in nodes.GetAllNodes())
+            {
+                lines.Add("Node");
+                lines.Add(n.Item1);
+                lines.Add(n.Item2.X.ToString());
+                lines.Add(n.Item2.Y.ToString());
             }
             System.IO.File.WriteAllLines(fname, lines.ToArray());
             return flag;
