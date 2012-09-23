@@ -9,6 +9,10 @@ using System.IO;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// This is a subclass of room that has extra coding so that the loaded room can
+    /// be paused at any time and edited. 
+    /// </summary>
     public class RoomEditor : Room
     {
         private enum EditorMode
@@ -27,16 +31,29 @@ namespace BabbleEngine
             Front
         }
 
+        #region Variables
+
+        // A stack of textboxs; the game is paused if they are active.
+        List<TextBox> textBoxStack = new List<TextBox>();
+
+        // Controls the mode of the editor room.
+        bool pauseGameplay = true;
+        bool showCollision = true;
+        EditorMode mode = EditorMode.GeneralMode;
+
+        // Everything is rendered on a surface first for simple scaling.
         RenderTarget2D editorSurface;
         float zoom = 1;
 
         float snapSize = 32;
-        Vector2 snapMouse;
-        Vector2 decalOrigin;
+        Vector2 snapMouse; // The calculated mouse snap value each frame.
 
-        Vector2? point1;
+        Vector2? point1; // The first point when placing a line.
         Vector2 blockSize = Vector2.One * 32;
+
+        // Decal Mode Variables
         Texture2D decal = null;
+        Vector2 decalOrigin;
         float decalScale = 2;
         float decalAngle = 0;
         float decalDrift = 1;
@@ -44,11 +61,13 @@ namespace BabbleEngine
         DecalLayer decalLayer = DecalLayer.Back;
         String nodeString = "";
 
-        bool pauseGameplay = true;
-        bool showCollision = true;
-        EditorMode mode = EditorMode.GeneralMode;
+        bool helpInfo = true;
+        const float DEBUG_WINDOW_HEIGHT = 32; // The height of the debug prompt.
+
+        #endregion
 
         #region Mode Text
+
         List<String> modeText = new List<string> {
             "GENERAL CONTROLS:\nRight Mouse - Move camera\nRight Mouse + Scroll - Zoom camera\nKEY0 to KEY9 - Change mode\nTab - Unsnap from grid\n~ Key - Toggle edit/test mode\nF1 - Toggle debug information\n\n" +
                 "GENERAL MODE CONTROLS:\nLeft Click - Place player\nS - Save\nL - Load\nF - See Saved Files",
@@ -59,26 +78,27 @@ namespace BabbleEngine
             "Left Click - Place node\nSpace - Select node key\nLeft Click + LControl - Delete node",
             "Arrow Keys - Select a new left/right/top/bottom boundary for the camera."
             };
+
         #endregion
-
-        bool helpInfo = true;
-        const float DEBUG_WINDOW_HEIGHT = 32;
-
-        List<TextBox> textBoxStack = new List<TextBox>();
 
         public RoomEditor()
         {
             editorSurface = new RenderTarget2D(Engine.Instance.GraphicsDevice, Engine.WINDOW_WIDTH * 2, Engine.WINDOW_HEIGHT * 2);
+            Player p = new Player(Vector2.Zero, this);
+            this.objects.Add(p);
+            cameraTarget = p;
         }
 
         public override void Update()
         {
+            // Keyboard shortcut for centering the camera on origin.
             if (Input.KeyboardTapped(Keys.Home))
             {
                 camera = -Engine.RESOLUTION / 2;
                 zoom = 1;
             }
 
+            // Allows the camera to be zoomed in and out.
             if (Input.MouseRightButtonDown)
             {
                 if (Input.MouseScrollDown && zoom < 1.99f)
@@ -104,7 +124,7 @@ namespace BabbleEngine
             }
             else
             {
-                // Updates textbox.
+                // Updates the textbox if one exists.
                 if (textBoxStack.Count > 0)
                 {
                     textBoxStack[textBoxStack.Count - 1].Update();
@@ -125,11 +145,12 @@ namespace BabbleEngine
                 if (Input.KeyboardTapped(Keys.D5))
                     mode = EditorMode.CameraMode;
 
+                // Snaps the mouse to the grid.
                 SetSnapMouse();
 
                 // Allows for camera moving
                 if (Input.MouseRightButtonDown)
-                    this.camera -= (Input.MousePosition - Input.MousePrevPosition);
+                    this.camera -= (Input.MousePosition - Input.MousePrevPosition) * zoom;
 
                 switch (mode)
                 {
@@ -164,8 +185,11 @@ namespace BabbleEngine
         {
             if (Input.MouseLeftButtonTapped)
             {
-                this.cameraTarget.position = snapMouse;
-                this.cameraTarget.velocity = Vector2.Zero;
+                if (cameraTarget != null)
+                {
+                    this.cameraTarget.position = snapMouse;
+                    this.cameraTarget.velocity = Vector2.Zero;
+                }
             }
             if (Input.KeyboardTapped(Keys.S))
             {
@@ -382,7 +406,7 @@ namespace BabbleEngine
         {
             textBoxStack.RemoveAt(textBoxStack.Count - 1);
             TextInputBox tb = (TextInputBox)box;
-            nodeString = tb.field.inputString;
+            nodeString = tb.InputText;
         }
 
         private void TextureBoxEnter(TextBox box)
@@ -400,15 +424,15 @@ namespace BabbleEngine
         private void SaveBoxEnter(TextBox box)
         {
             // Set the name of the level.
-            name = ((TextInputBox)box).field.inputString;
+            name = ((TextInputBox)box).InputText;
 
             textBoxStack.RemoveAt(textBoxStack.Count - 1);
-            if (((TextInputBox)box).field.inputString == "")
+            if (((TextInputBox)box).InputText == "")
             {
                 textBoxStack.Add(new TextBox(null, "ERROR: Cannot save to blank filename.", TextBoxEnter));
                 return;
             }
-            if (this.Save("Content/Levels/" + ((TextInputBox)box).field.inputString + ".lvl") == 1)
+            if (this.Save("Content/Levels/" + ((TextInputBox)box).InputText + ".lvl") == 1)
             {
                 textBoxStack.Add(new TextBox(null, "WARNING: Generic world objects saved.", TextBoxEnter));
             }
@@ -417,7 +441,7 @@ namespace BabbleEngine
         private void LoadBoxEnter(TextBox box)
         {
             textBoxStack.RemoveAt(textBoxStack.Count - 1);
-            int flag = this.Load("Content/Levels/" + ((TextInputBox)box).field.inputString + ".lvl");
+            int flag = this.Load("Content/Levels/" + ((TextInputBox)box).InputText + ".lvl");
             if (flag == 2)
                 textBoxStack.Add(new TextBox(null, "ERROR: Could not load file.", TextBoxEnter));
             else if (flag == 3)
@@ -430,9 +454,9 @@ namespace BabbleEngine
 
         private void SetSnapMouse()
         {
-            // Allows for snapping to grid.
             if (!Input.IsKeyDown(Keys.Tab))
             {
+                // If TAB isn't pressed, we snap to the grid.
                 snapMouse = (Input.MousePosition * zoom + camera) / snapSize;
                 if (mode == EditorMode.SquareMode || mode == EditorMode.GeneralMode)
                 {
@@ -452,11 +476,13 @@ namespace BabbleEngine
 
             if (Input.IsKeyDown(Keys.LeftShift) && mode == EditorMode.DecalMode)
             {
+                // If in decal mode, LeftShift alignes drifing decal to a special grid.
                 decalOrigin = Vector2.Zero;
                 Vector2 wantSnap = snapMouse;
                 snapMouse = SnapToGrid(wantSnap + camera * (decalDrift - 1), 32);
             }
             else
+                // DecalOrigin helps align drifing decals.
                 decalOrigin = this.camera;
         }
 

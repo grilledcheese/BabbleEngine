@@ -5,6 +5,11 @@ using System.Text;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A subclass of the list that supports add and remove buffers, so changes
+    /// can be scheduled to the list while it is being processed, and applied
+    /// afterwards.
+    /// </summary>
     public class BufferedList<T> : List<T>
     {
         private List<T> AddBuffer = new List<T>();

@@ -8,12 +8,16 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A room class reperesents a game world and everything inside it.
+    /// </summary>
     public class Room
     {
         public String name = "";
 
         public const float gravity = 0.5f;
 
+        // Lists store everything inside each room.
         public BufferedList<WorldObject> objects = new BufferedList<WorldObject>();
         public List<Floor> floors = new List<Floor>();
         public List<Block> blocks = new List<Block>();
@@ -21,12 +25,15 @@ namespace BabbleEngine
         public BufferedList<Decal> decalsBack = new BufferedList<Decal>();
         public NodeManager nodes = new NodeManager();
 
+        // The camera vector and targets.
         public Vector2 camera = -Engine.RESOLUTION / 2;
         public List<WorldObject> cameraTargets = new List<WorldObject>();
 
+        // The bounds for the camera.
         public Vector2 boundsTopLeft = -Engine.RESOLUTION;
         public Vector2 boundsBottomRight = Engine.RESOLUTION;
 
+        // Empties the contents of a room.
         public virtual void Reset()
         {
             this.floors = new List<Floor>();
@@ -40,6 +47,16 @@ namespace BabbleEngine
 
         public virtual void Update()
         {
+            UpdateCamera();
+
+            foreach (WorldObject obj in objects)
+                obj.Update();
+
+            objects.ApplyBuffers();
+        }
+
+        private void UpdateCamera()
+        {
             if (cameraTargets != null)
             {
                 // Sum and average all of the camera targets.
@@ -47,7 +64,7 @@ namespace BabbleEngine
                 foreach (WorldObject t in cameraTargets)
                     dest += t.Center;
                 dest /= cameraTargets.Count;
-                
+
                 dest -= Engine.RESOLUTION / 2;
                 camera += (dest - camera) / 8f;
             }
@@ -65,11 +82,6 @@ namespace BabbleEngine
                 camera.Y = boundsBottomRight.Y - Engine.WINDOW_HEIGHT;
             if (boundsBottomRight.Y - boundsTopLeft.Y < Engine.RESOLUTION.Y)
                 camera.Y = boundsTopLeft.Y;
-
-            foreach (WorldObject obj in objects)
-                obj.Update();
-
-            objects.ApplyBuffers();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -83,27 +95,25 @@ namespace BabbleEngine
         }
 
         /// <summary>
-        /// This cameraTarget exists for compatiblity with older systems.
+        /// This cameraTarget property exists for compatiblity with older rooms.
         /// </summary>
         public WorldObject cameraTarget
         {
             get { return cameraTargets.Count == 0 ? null : cameraTargets[0]; }
-            set
-            {
-                cameraTargets.Clear();
-                cameraTargets.Add(value);
-            }
+            set { cameraTargets.Clear(); cameraTargets.Add(value); }
         }
 
         /// <summary>
-        /// Returns 2 if cannot find the file.
+        /// Loads a room with the specified filename.
+        /// 
         /// Returns 0 if everything is OK.
+        /// Returns 2 if cannot find the file.
         /// Returns 3 if it had to load new textures.
         /// Returns 4 if we are missing textures.
         /// Returns -1 if the file is corrupt.
         /// </summary>
-        /// <param name="fname"></param>
-        /// <returns></returns>
+        /// <param name="fname">The filename to load from.</param>
+        /// <returns>A code indicating error or success.</returns>
         public int Load(string fname)
         {
             // Reads in the entire file.
@@ -192,6 +202,11 @@ namespace BabbleEngine
             return flag;
         }
 
+        /// <summary>
+        /// Loads a room by the filename.
+        /// </summary>
+        /// <param name="fname">The filename to write to.</param>
+        /// <returns>Returns 0 if everything is ok; 1 if a generic world object was saved.</returns>
         public int Save(string fname)
         {
             int flag = 0;

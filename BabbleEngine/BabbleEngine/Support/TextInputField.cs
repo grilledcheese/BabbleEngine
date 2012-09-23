@@ -8,18 +8,30 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A class representing a text input field. 
+    /// </summary>
     public class TextInputField
     {
         public Vector2 position;
         public Vector2 size;
-        SpriteFont font;
-        public String inputString = "";
-        short blink = 0;
-        short back = 0;
-        Keys enableKey;
         public bool enabled;
+        public String inputString = "";
+
+        private SpriteFont font;
+        private short blink = 0;
+        private short back = 0;
+        private Keys enableKey;
         private String suffix;
 
+        /// <summary>
+        /// Constructs a text input field. Draw and update must be called to correctly implement it.
+        /// By default, the field is deactivated.
+        /// </summary>
+        /// <param name="Font">The font to use for the field.</param>
+        /// <param name="Position">The position for the filed.</param>
+        /// <param name="EnableKey">The key that will activate/disactivate the field.</param>
+        /// <param name="suffix"></param>
         public TextInputField(SpriteFont Font, Vector2 Position, Keys EnableKey, String suffix = "")
         {
             this.enabled = false;

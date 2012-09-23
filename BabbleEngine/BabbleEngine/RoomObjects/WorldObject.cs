@@ -7,12 +7,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// An object that exists dynamically in the world.
+    /// It should have movement and possibly collisions.
+    /// </summary>
     public class WorldObject
     {
+        // Public accessors 
         public Vector2 position;
         public Vector2 size;
         public Vector2 velocity;
 
+        // Accessors for specific dimensions of the object.
         public int Left { get { return (int)position.X; } set { this.position.X = value; } }
         public int Right { get { return (int)(position.X + size.X); } set { this.position.X = value - this.size.X; } }
         public int Top { get { return (int)position.Y; } set { this.position.Y = value; } }

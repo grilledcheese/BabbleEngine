@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// Decals represent background or forground objects in this world.
+    /// They have a lot of properties to customize.
+    /// </summary>
     public struct Decal : IComparable
     {
         public Texture2D texture;

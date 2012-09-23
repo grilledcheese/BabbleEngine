@@ -11,17 +11,13 @@ namespace BabbleEngine.Support
     /// </summary>
     public static class MathExtra
     {
-        // ==============================
-        // ======= RANDOM METHODS =======
-        // ==============================
-
         // This is the random generator.
         private static Random random = new Random();
 
         /// <summary>
         /// Returns a random float between 0.0 and 1.0.
         /// </summary>
-        public static float NextFloat()
+        public static float RandomFloat()
         {
             return (float)random.NextDouble();
         }
@@ -30,7 +26,7 @@ namespace BabbleEngine.Support
         /// Returns a random number less than i.
         /// <param name="i">The upper bound.</param>
         /// </summary>
-        public static int NextInt(int i)
+        public static int RandomInt(int i)
         {
             return random.Next(i);
         }
@@ -143,7 +139,7 @@ namespace BabbleEngine.Support
         /// <returns>A random unit vector.</returns>
         public static Vector2 GetRandomUnitVector()
         {
-            return GetVectorFromAngle(NextFloat() * MathHelper.Pi * 2);
+            return GetVectorFromAngle(RandomFloat() * MathHelper.Pi * 2);
         }
 
         /// <summary>

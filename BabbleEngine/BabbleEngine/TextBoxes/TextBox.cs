@@ -8,8 +8,14 @@ using Microsoft.Xna.Framework;
 
 namespace BabbleEngine
 {
+    // This defines a delegate. That is, it holds a pointer to a method
+    // which returns void, and takes one TextBox as an argument.
+    // When textboxes are returned, this method is called.
     public delegate void TextBoxEnterEvent(TextBox returnedBox);
 
+    /// <summary>
+    /// This class handles 
+    /// </summary>
     public class TextBox
     {
         public String name;
@@ -17,12 +23,12 @@ namespace BabbleEngine
         public Vector2 position;
         public Vector2 size;
 
-        SpriteFont font = TextureBin.mainFont;
+        private SpriteFont font = TextureBin.mainFont;
         protected TextBoxEnterEvent enterEvent;
-        int timer = -1;
+        private int timer = -1;
 
-        int blink = 30;
-        Keys closeKey = Keys.Enter;
+        private int blink = 30;
+        private Keys closeKey = Keys.Enter;
 
         public TextBox(String name, String text, TextBoxEnterEvent enterEvent, int timer = -1, Keys closeKey = Keys.Enter)
         {
@@ -36,12 +42,18 @@ namespace BabbleEngine
             Center();
         }
 
+        /// <summary>
+        /// Fit the textbox to the size of the content.
+        /// </summary>
         private void Scale()
         {
             Vector2 stringSize = font.MeasureString(text);
             this.size = stringSize * 2 + Vector2.One * 32;
         }
 
+        /// <summary>
+        /// Center the textbox on the screen.
+        /// </summary>
         protected void Center()
         {
             this.position = Engine.RESOLUTION / 2 - size / 2;
@@ -66,6 +78,7 @@ namespace BabbleEngine
                 enterEvent(this);
         }
 
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             DrawHelper.DrawRectangle(spriteBatch, this.position, this.size, Color.Blue);
@@ -77,6 +90,7 @@ namespace BabbleEngine
                 spriteBatch.DrawString(font, closeKey.ToString(), position + size - enterSize * 2, Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0f);
             }
         }
+
 
         public virtual void Draw(SpriteBatch spriteBatch, Color color)
         {

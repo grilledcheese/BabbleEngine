@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A block is a simple type of collision object that cannot be passed by proper
+    /// WorldObject classes. 
+    /// </summary>
     public struct Block : IFloor
     {
         public Vector2 position;
@@ -37,7 +41,6 @@ namespace BabbleEngine
         {
             return 1f;
         }
-
 
         public float GetSlopeSlow()
         {

@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A helper class for drawing objects and shapes.
+    /// It is dependent on the TextureBin class.
+    /// </summary>
     public static class DrawHelper
     {
         public static Rectangle BuildRectangle(Vector2 Position, Vector2 Size)

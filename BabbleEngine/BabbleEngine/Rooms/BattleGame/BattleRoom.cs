@@ -13,6 +13,7 @@ namespace BabbleEngine
         public RoomBattle()
         {
             this.Load("Content/Levels/battle.lvl");
+            TextureBin.GetTexture("pixel");
             this.FillNodes();
         }
 

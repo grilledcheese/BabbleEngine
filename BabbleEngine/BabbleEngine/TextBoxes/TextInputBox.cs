@@ -8,9 +8,13 @@ using Microsoft.Xna.Framework;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A textbox with an input field.
+    /// </summary>
     public class TextInputBox : TextBox
     {
-        public TextInputField field;
+        private TextInputField field;
+        public String InputText { get { return field.inputString; } set { field.inputString = value; } }
 
         public TextInputBox(String name, String text, TextBoxEnterEvent enterEvent)
             : base(name, text, enterEvent)

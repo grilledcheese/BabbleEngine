@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A very crappy implementation of colour chooser. I'M SORRY!
+    /// </summary>
     public class SelectColorBox : TextBox
     {
         ColorDial r;

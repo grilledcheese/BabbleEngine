@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// A floor object is a line that WorldObjects will be pushed ontop
+    /// of in case of a collision. They are not to be used as walls or ceilings.
+    /// </summary>
     public struct Floor : IFloor
     {
         public Vector2 pointL;

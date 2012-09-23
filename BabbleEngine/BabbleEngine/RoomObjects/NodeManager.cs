@@ -7,6 +7,10 @@ using System.Collections;
 
 namespace BabbleEngine
 {
+    /// <summary>
+    /// This is a wrapper class for more quickly accessing the data structure holding the nodes.
+    /// The structure is a string-based dictionary which points to a list of vector values.
+    /// </summary>
     public class NodeManager
     {
         private Dictionary<String, LinkedList<Vector2>> nodeDictionary = new Dictionary<string, LinkedList<Vector2>>();
