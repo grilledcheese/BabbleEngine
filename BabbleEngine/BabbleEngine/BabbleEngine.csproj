@@ -81,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Rooms\BattleRoom.cs" />
     <Compile Include="Rooms\Room.cs" />
     <Compile Include="Rooms\RoomEditor.cs" />
     <Compile Include="Support\BufferedList.cs" />

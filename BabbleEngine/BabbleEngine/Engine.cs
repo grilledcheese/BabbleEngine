@@ -47,18 +47,23 @@ namespace BabbleEngine
             spriteBatch = new SpriteBatch(GraphicsDevice);
             TextureBin.LoadTextures(this.Content);
 
-            room = new RoomEditor();
-            Player p = new Player(Vector2.Zero, room);
-            room.objects.Add(p);
-            room.cameraTarget = p;
+            room = new RoomBattle();
         }
 
 
         protected override void Update(GameTime gameTime)
         {
             Input.Update();
+
             if (Input.KeyboardTapped(Keys.Escape) && Input.IsKeyDown(Keys.Enter))
                 this.Exit();
+            if (Input.KeyboardTapped(Keys.F12))
+            {
+                room = new RoomEditor();
+                Player p = new Player(Vector2.Zero, room);
+                room.objects.Add(p);
+                room.cameraTarget = p;
+            }
 
             room.Update();
 
@@ -68,7 +73,7 @@ namespace BabbleEngine
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
             room.Draw(spriteBatch);
