@@ -37,9 +37,15 @@ namespace BabbleEngine
 
         public virtual void Update()
         {
-            if (cameraTarget != null)
+            if (cameraTargets != null)
             {
-                Vector2 dest = cameraTarget.Center - Engine.RESOLUTION / 2;
+                // Sum and average all of the camera targets.
+                Vector2 dest = Vector2.Zero;
+                foreach (WorldObject t in cameraTargets)
+                    dest += t.Center;
+                dest /= cameraTargets.Count;
+                
+                dest -= Engine.RESOLUTION / 2;
                 camera += (dest - camera) / 8f;
             }
 

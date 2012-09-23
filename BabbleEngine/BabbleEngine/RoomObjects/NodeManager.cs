@@ -46,7 +46,7 @@ namespace BabbleEngine
         /// </summary>
         public LinkedList<Vector2> GetNodeList(String name)
         {
-            return nodeDictionary[name];
+            return nodeDictionary.ContainsKey(name) ? nodeDictionary[name] : new LinkedList<Vector2>();
         }
 
         /// <summary>
