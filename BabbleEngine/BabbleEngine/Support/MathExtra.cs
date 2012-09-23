@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace BabbleEngine.Support
+namespace BabbleEngine
 {
     /// <summary>
     /// A static class for all helper functions.

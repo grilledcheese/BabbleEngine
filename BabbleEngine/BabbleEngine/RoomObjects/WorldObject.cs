@@ -17,6 +17,7 @@ namespace BabbleEngine
         public Vector2 position;
         public Vector2 size;
         public Vector2 velocity;
+        protected Vector2 prevPosition;
 
         // Accessors for specific dimensions of the object.
         public int Left { get { return (int)position.X; } set { this.position.X = value; } }
@@ -60,21 +61,37 @@ namespace BabbleEngine
             {
                 if (b.IntersectsWith(this))
                 {
-                    if (this.velocity.Y > 0)
+                    if (!b.topSolidOnly)
                     {
-                        this.Bottom = (int)b.Top;
-                        floorHit = b;
+                        // If it is a regular block.
+                        if (this.velocity.Y > 0)
+                        {
+                            this.Bottom = (int)b.Top;
+                            floorHit = b;
+                        }
+                        else
+                        {
+                            this.velocity.Y = 0;
+                            this.Top = (int)b.Bottom;
+                        }
                     }
                     else
                     {
-                        this.velocity.Y = 0;
-                        this.Top = (int)b.Bottom;
+                        // If it is a block that is only solid on the top.
+                        if (this.velocity.Y > 0 && this.Top - this.velocity.Y > b.Top)
+                        {
+                            this.Bottom = (int)b.Top;
+                            floorHit = b;
+                        }
                     }
                 }
             }
+
+            // This 
             foreach (Floor floor in room.floors)
             {
                 float? line = floor.FindYLineAboveFloor(this);
+
                 if (line != null && this.Bottom > (float)line && this.Top <= (float)line)
                 {
                     this.Bottom = (int)(float)line;
@@ -91,14 +108,18 @@ namespace BabbleEngine
             this.velocity.Y = 0;
         }
 
+        /// <summary>
+        /// Make sure this is called at the end of overridden methods.
+        /// </summary>
         public virtual void Update()
         {
-            
+
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, DrawHelper.BuildRectangle(position - room.camera, size), Color.White);
+            this.prevPosition = this.position;
         }
     }
 }
