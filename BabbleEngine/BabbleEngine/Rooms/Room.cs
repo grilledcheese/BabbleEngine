@@ -34,6 +34,8 @@ namespace BabbleEngine
             this.cameraTarget = null;
             this.objects = new BufferedList<WorldObject>();
             this.nodes = new NodeManager();
+            this.decalsBack = new BufferedList<Decal>();
+            this.decalsFront = new BufferedList<Decal>();
         }
 
         public virtual void Update()

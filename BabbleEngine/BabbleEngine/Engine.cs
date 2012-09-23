@@ -39,15 +39,15 @@ namespace BabbleEngine
             this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             this.graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             this.graphics.ApplyChanges();
+
+            room = new RoomBattle();
         }
 
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            TextureBin.LoadTextures(this.Content);
-
-            room = new RoomBattle();
+            TextureBin.LoadTextures(this.Content);      
         }
 
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace BabbleEngine
 {
@@ -19,9 +20,12 @@ namespace BabbleEngine
         {
             foreach(Vector2 p in nodes.GetNodeList("player"))
             {
-                Player pl = new Player(p, this);
-                this.cameraTargets.Add(pl);
-                objects.Add(pl);
+                Player p2 = new Player(p, this);
+                p2.KeyJump = Keys.W;
+                p2.KeyLeft = Keys.A;
+                p2.KeyRight = Keys.D;
+                this.cameraTargets.Add(p2);
+                objects.Add(p2);
             }
         }
 
