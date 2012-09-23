@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010 Express for Windows Phone
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabbleEngine", "BabbleEngine\BabbleEngine\BabbleEngine.csproj", "{873705BA-6EEF-43AC-A873-D395D085F37F}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "BabbleEngineContent", "BabbleEngine\BabbleEngineContent\BabbleEngineContent.contentproj", "{DA127F75-B641-4FB4-831F-6C54EFC7D4D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{873705BA-6EEF-43AC-A873-D395D085F37F}.Debug|x86.ActiveCfg = Debug|x86
+		{873705BA-6EEF-43AC-A873-D395D085F37F}.Debug|x86.Build.0 = Debug|x86
+		{873705BA-6EEF-43AC-A873-D395D085F37F}.Release|x86.ActiveCfg = Release|x86
+		{873705BA-6EEF-43AC-A873-D395D085F37F}.Release|x86.Build.0 = Release|x86
+		{DA127F75-B641-4FB4-831F-6C54EFC7D4D1}.Debug|x86.ActiveCfg = Debug|x86
+		{DA127F75-B641-4FB4-831F-6C54EFC7D4D1}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
